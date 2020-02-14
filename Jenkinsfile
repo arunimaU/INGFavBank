@@ -3,7 +3,7 @@ pipeline {
 	stages {
       stage('Git Checkout') {
          steps {
-            git 'https://github.com/arunimaU/parking_backend.git'
+            git 'https://github.com/arunimaU/INGFavBank.git'
 		}
 	}
 	stage('Build') {
@@ -32,17 +32,6 @@ pipeline {
 	}
 }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
