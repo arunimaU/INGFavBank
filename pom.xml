@@ -71,12 +71,7 @@
 			<version>2.9.2</version>
 		</dependency>
 		<dependency>
-			<distributionManagement>
-  		<snapshotRepository>
-    			<id>nexus</id>
-    			<url>http://3.6.93.104:8081/nexus/content/repositories/snapshots</url>
-  		</snapshotRepository>
-	</distributionManagement>
+			
 			<groupId>org.codehaus.mojo</groupId>
 			<artifactId>sonar-maven-plugin</artifactId>
 			<version>3.6.0.1398</version>
@@ -89,6 +84,12 @@
 		</dependency>
 
 	</dependencies>
+	<distributionManagement>
+  		<snapshotRepository>
+    			<id>nexus</id>
+    			<url>http://3.6.93.104:8081/nexus/content/repositories/snapshots</url>
+  		</snapshotRepository>
+	</distributionManagement>
 
 	<build>
 		<plugins>
