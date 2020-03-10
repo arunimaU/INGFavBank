@@ -12,7 +12,7 @@ pipeline{
 
         steps {
 
-              git 'https://github.com/arunimaU/kalyanam.git'
+              git 'https://github.com/arunimaU/INGFavBank.git'
 
               }
 
