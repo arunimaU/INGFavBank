@@ -53,7 +53,7 @@ steps {
 
  steps{
 
- slackSend baseUrl: 'https://hooks.slack.com/services/', channel: '#cicdpipeline', color: 'good', message: "${env.BUILD_URL}", teamDomain: 'jenkinslearner', tokenCredentialId: 'Slack'
+ slackSend baseUrl: 'https://hooks.slack.com/services/', channel: 'slackjenkins', color: 'bad', message: 'war file created', tokenCredentialId: 'arunimaslack', username: 'arunimauniyal'
 
  }
 
