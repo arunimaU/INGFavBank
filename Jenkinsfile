@@ -1,156 +1,113 @@
-pipeline{
+pipeline {
+agent any
 
-    agent any
+stages {
+/**Insurance-Backend Pipeline Job Build and Test stages **/
+stage('SCM Checkout') {
+steps {
+git url:'https://github.com/arunimaU/INGFavBank.git'
+}
+}
+stage('Build') {
+steps {
+         sh"/opt/apache-maven-3.6.3/bin/mvn clean package -Dmaven.test.skip=true "
+}
+}
 
-    stages{
+stage('Quality Check') {
+steps {
+                        sh" /opt/apache-maven-3.6.3/bin/mvn sonar:sonar -Dmaven.test.skip=true"
+}
+} 
 
-       
-
-         stage('Getting Code From GitHub')
-
-      {
-
-        steps {
-
-              git 'https://github.com/arunimaU/INGFavBank.git'
-
+stage("build & SonarQube analysis") {
+            
+            steps {
+              withSonarQubeEnv('Sonar_Server') {
+                sh '/opt/apache-maven-3.6.3/bin/mvn sonar:sonar -Dmaven.test.skip=true'
               }
-
-      }
-
-        stage('Build'){
-
-            steps{
-
-             sh '/opt/maven/bin/mvn clean verify sonar:sonar -Dmaven.test.skip=true'
-
             }
-
-        }
-        stage("Quality Gate"){
-            steps{
-                timeout(time:1, unit:'MINUTES'){
-                    waitForQualityGate abortPipeline: true
-                }
+          }
+          stage("Quality Gate") {
+            steps {
+              timeout(time: 1, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+              }
             }
-        }
-     
-        stage ('Deploy'){
-            steps{
-                sh '/opt/maven/bin/mvn clean deploy -Dmaven.test.skip=true'
-            }
-        }
-        
-        stage('Release'){
-            steps{
-                sh 'export JENKINS_NODE_COOKIE=dontkillme ;nohup java-jar $WORKSPACE/target/*.jar &'
-                }
-                }
-                
- 
+         }
 
-        stage( 'email' ){
+          
 
-            steps{
+stage('Deploy') {
+steps {
+                     sh"/opt/apache-maven-3.6.3/bin/mvn clean deploy -Dmaven.test.skip=true"
+}
+}
+stage('Release') {
+steps {
+                    sh"export JENKINS_NODE_COOKIE=dontKillMe; nohup java -jar $WORKSPACE/target/*.jar &"
+}
+}
 
-               emailext (body: '''""<p>STARTED: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\':</p>
- 
-              <p>Check console output at &QUOT;<a href=\'${env.BUILD_URL}\'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""''', subject: 'Waiting for your Approval! Job: \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\'', to: 'arunimauniyal@gmail.com'
- 
+ stage('SIT Approval'){
 
- 
+ steps{
 
- 
+ slackSend baseUrl: 'https://hooks.slack.com/services/', channel: '#cicdpipeline', color: 'good', message: "${env.BUILD_URL}", teamDomain: 'jenkinslearner', tokenCredentialId: 'Slack'
 
-)
+ }
 
-            }
+ }
 
-        }
+        stage('Please Provide Approval for SIT Deployment ?'){
 
-                stage("Stage with input") {
+          steps{
 
- 
+            script{
 
-    steps {
+                def userInput
 
- 
+  try {
 
-     
+    userInput = input(
 
- 
+        id: 'Proceed1', message: 'SIT Deployment Approval', parameters: [
 
-        script {
+        [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please Confirm you agree with this']
 
- 
+        ])
 
-            def userInput = input(id: 'Proceed1', message: 'Promote build?', parameters: [[$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']])
+} catch(err) {
 
- 
+    def user = err.getCauses()[0].getUser()
 
-            echo 'userInput: ' + userInput
+    userInput = false
 
- 
-
- 
-
- 
-
-            if(userInput == true) {
-
- 
-
-                // do action
-
- 
-
-            } else {
-
- 
-
-                // not do action
-
- 
-
-                echo "Action was aborted."
-
- 
-
-            }
-
- 
-
- 
-
- 
-
-        }  
-
- 
-
-    }
-
- 
+    echo "Aborted by: [${user}]"
 
 }
 
-       
-
-        stage('Copy jar and application.property file to Ansible Server'){
-
-            steps{
-
-             sshPublisher(publishers: [sshPublisherDesc(configName: 'LocalAnsible', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ansible-playbook sopy.yml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-
-            }
+          }
 
         }
 
-       
+        }
 
-       
+          stage('Deployment-SIT'){
 
-    }
+            steps{
 
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ansible-playbook  backend_input1.yml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+
+            }
+
+          }
+
+
+
+
+
+}
+    
 }
 
