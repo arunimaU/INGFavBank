@@ -8,27 +8,14 @@ steps {
 git url:'https://github.com/arunimaU/INGFavBank.git'
 }
 }
-        
-      stage('SCM Checkout-ui') {
-         steps {
-            git 'https://github.com/arunimaU/INGFAV_UI'
-		}
-	}
+    
 	 
 stage('Build') {
 steps {
          sh"/opt/apache-maven-3.6.3/bin/mvn clean package -Dmaven.test.skip=true "
 }
 }
-                  stage('Build-ui') {
-		steps {
-			sh '''
-			npm install
-			npm run build
-			npm audit fix
-			'''
-		}
-	}
+                 
 
  
          stage('SIT Approval'){
@@ -80,14 +67,6 @@ steps {
                      sh"/opt/apache-maven-3.6.3/bin/mvn clean deploy -Dmaven.test.skip=true "
 }
 }
-stage ('Deploy-ui') {
-		steps {
-			sh '''
-             cp -r $WORKSPACE/build /opt/apache-tomcat-9.0.31/webapps
-             curl -u admin:admin http://13.127.242.124:8888/manager/reload?path=/build 
-             '''
-		}
-	}
 
 stage('Release') {
 steps {
@@ -108,7 +87,28 @@ steps {
 
 
 
-
+stage('SCM Checkout') {
+         steps {
+            git 'https://github.com/arunimaU/INGFAV_UI'
+		}
+	}
+	stage('Build') {
+		steps {
+			sh '''
+			npm install
+			npm run build
+			npm audit fix
+			'''
+		}
+	}
+	stage ('Deploy') {
+		steps {
+			sh '''
+             cp -r $WORKSPACE/build /opt/apache-tomcat-9.0.31/webapps
+             curl -u admin:admin http://13.127.242.124:8888/manager/reload?path=/build 
+             '''
+		}
+	}
 
 }
     
