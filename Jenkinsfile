@@ -57,7 +57,7 @@ steps {
 
         }
 
-                 
+        }                 
 
 stage('Deploy') {
 steps {
@@ -90,3 +90,4 @@ steps {
 }
     
 }
+
