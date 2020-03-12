@@ -31,7 +31,7 @@ steps {
 
  steps{
 
- slackSend baseUrl: 'https://hooks.slack.com/services/', channel: 'slackjenkins', color: 'bad', message: 'war file created', tokenCredentialId: 'arunimaslack', username: 'arunimauniyal'
+ slackSend baseUrl: 'https://hooks.slack.com/services/', channel: 'slackjenkins', color: 'bad', message: "${env.BUILD_URL}", tokenCredentialId: 'arunimaslack', username: 'arunimauniyal'
 
  }
 
@@ -88,4 +88,3 @@ steps {
 }
     
 }
-
