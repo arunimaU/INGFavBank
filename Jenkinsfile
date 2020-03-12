@@ -21,13 +21,7 @@ steps {
                      sh"/opt/apache-maven-3.6.3/bin/mvn clean deploy -Dmaven.test.skip=true "
 }
 }
-stage('Release') {
-steps {
-                    sh"export JENKINS_NODE_COOKIE=dontKillMe; nohup java -jar $WORKSPACE/target/*.jar &"
-}
-}
-
- stage('SIT Approval'){
+         stage('SIT Approval'){
 
  steps{
 
@@ -70,6 +64,13 @@ steps {
         }
 
         }
+
+stage('Release') {
+steps {
+                    sh"export JENKINS_NODE_COOKIE=dontKillMe; nohup java -jar $WORKSPACE/target/*.jar &"
+}
+}
+
 
           stage('Deployment-SIT'){
 
