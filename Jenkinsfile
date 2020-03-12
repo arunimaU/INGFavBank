@@ -87,12 +87,12 @@ steps {
 
 
 
-stage('SCM Checkout') {
+stage('SCM Checkout_ui') {
          steps {
             git 'https://github.com/arunimaU/INGFAV_UI'
 		}
 	}
-	stage('Build') {
+	stage('Build_ui') {
 		steps {
 			sh '''
 			npm install
@@ -101,7 +101,7 @@ stage('SCM Checkout') {
 			'''
 		}
 	}
-	stage ('Deploy') {
+	stage ('Deploy_ui') {
 		steps {
 			sh '''
              cp -r $WORKSPACE/build /opt/apache-tomcat-9.0.31/webapps
