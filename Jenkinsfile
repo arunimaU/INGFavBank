@@ -1,5 +1,6 @@
 pipeline {
 agent any
+	stages{
 	stage('SCM Checkout_ui') {
          steps {
             git 'https://github.com/arunimaU/INGFAV_UI'
@@ -22,8 +23,6 @@ agent any
              '''
 		}
 	}
-
-stages {
 /**Insurance-Backend Pipeline Job Build and Test stages **/
 stage('SCM Checkout') {
 steps {
