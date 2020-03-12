@@ -28,7 +28,7 @@ stage('SCM Checkout_ui') {
 			sh '''
 			npm install
 			npm run build
-			npm audit fix
+
 			'''
 		}
 	}
