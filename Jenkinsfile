@@ -1,27 +1,6 @@
 pipeline {
 agent any
-
-stages {
-/**Insurance-Backend Pipeline Job Build and Test stages **/
-stage('SCM Checkout') {
-steps {
-git url:'https://github.com/arunimaU/INGFavBank.git'
-}
-}
-    
-	 
-stage('Build') {
-steps {
-         sh"/opt/apache-maven-3.6.3/bin/mvn clean package -Dmaven.test.skip=true "
-}
-}
-	
-pipeline {
-   agent any
-	stages {
-
-	
-stage('SCM Checkout_ui') {
+	stage('SCM Checkout_ui') {
          steps {
             git 'https://github.com/arunimaU/INGFAV_UI'
 		}
@@ -43,10 +22,27 @@ stage('SCM Checkout_ui') {
              '''
 		}
 	}
-                 
-	}
+
+stages {
+/**Insurance-Backend Pipeline Job Build and Test stages **/
+stage('SCM Checkout') {
+steps {
+git url:'https://github.com/arunimaU/INGFavBank.git'
 }
- 
+}
+    
+	 
+stage('Build') {
+steps {
+         sh"/opt/apache-maven-3.6.3/bin/mvn clean package -Dmaven.test.skip=true "
+}
+}
+	
+
+
+	
+
+                  
          stage('SIT Approval'){
 
  steps{
