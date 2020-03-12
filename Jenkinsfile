@@ -14,13 +14,7 @@ steps {
 }
 }
 
-          
-
-stage('Deploy') {
-steps {
-                     sh"/opt/apache-maven-3.6.3/bin/mvn clean deploy -Dmaven.test.skip=true "
-}
-}
+ 
          stage('SIT Approval'){
 
  steps{
@@ -63,7 +57,14 @@ steps {
 
         }
 
-        }
+                 
+
+stage('Deploy') {
+steps {
+                     sh"/opt/apache-maven-3.6.3/bin/mvn clean deploy -Dmaven.test.skip=true "
+}
+}
+
 
 stage('Release') {
 steps {
