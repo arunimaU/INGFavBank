@@ -17,7 +17,7 @@ steps {
 }
 	
 
-
+	{
 stage('SCM Checkout_ui') {
          steps {
             git 'https://github.com/arunimaU/INGFAV_UI'
@@ -41,7 +41,7 @@ stage('SCM Checkout_ui') {
 		}
 	}
                  
-
+	}
  
          stage('SIT Approval'){
 
