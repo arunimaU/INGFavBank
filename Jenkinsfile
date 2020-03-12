@@ -14,6 +14,7 @@ git url:'https://github.com/arunimaU/INGFavBank.git'
             git 'https://github.com/arunimaU/INGFAV_UI'
 		}
 	}
+	 }
 stage('Build') {
 steps {
          sh"/opt/apache-maven-3.6.3/bin/mvn clean package -Dmaven.test.skip=true "
